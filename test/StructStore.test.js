@@ -1,0 +1,52 @@
+const assert = require("assert");
+const ganache = require("ganache");
+const { Web3 } = require("web3");
+const web3 = new Web3(ganache.provider());
+
+const { abi, evm } = require("../bc-structstore/compile");
+
+let structStore;
+let accounts;
+
+beforeEach(async () => {
+  accounts = await web3.eth.getAccounts();
+
+  structStore = await new web3.eth.Contract(abi)
+    .deploy({ data: evm.bytecode.object })
+    .send({ from: accounts[0], gas: "1100000" });
+});
+describe("Lottery Contract", () => {
+  it("deploys a contract", () => {
+    assert.ok(structStore.options.address);
+  });
+
+  it("creates new user id 1, adds, reads and changes data", async () => {
+    try {
+      await structStore.methods.createUser(1).send({
+        from: accounts[0],
+      });
+
+      await structStore.methods.addUserData(1, "The quick brown fox").send({
+        from: accounts[0],
+      });
+
+      const data1 = await structStore.methods.getUserDataOnIndex(1, 0).call({
+        from: accounts[0],
+      });
+      assert.equal(data1, "The quick brown fox");
+
+      await structStore.methods
+        .changeDataOnIndex(1, 0, "Jumps over the lazy dog")
+        .send({
+          from: accounts[0],
+        });
+
+      const data2 = await structStore.methods.getUserDataOnIndex(1, 0).call({
+        from: accounts[0],
+      });
+      assert.equal(data1, "Jumps over the lazy dog");
+    } catch (err) {
+      assert(err);
+    }
+  });
+});

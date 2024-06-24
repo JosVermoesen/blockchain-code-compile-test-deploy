@@ -1,0 +1,66 @@
+const assert = require("assert");
+const ganache = require("ganache");
+const { Web3 } = require("web3");
+const web3 = new Web3(ganache.provider());
+
+const { abi, evm } = require("../bc-vendingmachine/compile");
+
+let vendingMachine;
+let accounts;
+
+beforeEach(async () => {
+  accounts = await web3.eth.getAccounts();
+  console.log("accounts: ", accounts);
+
+  vendingMachine = await new web3.eth.Contract(abi)
+    .deploy({ data: evm.bytecode.object })
+    .send({ from: accounts[0], gas: "1100000" });
+});
+describe("VendingMachine Contract", () => {
+  it("deploys a contract", () => {
+    assert.ok(vendingMachine.options.address);
+  });
+
+  it("allows owner only to restock", async () => {
+    await vendingMachine.methods.restock(12).send({
+      from: accounts[0],
+    });
+
+    const stock = await vendingMachine.methods
+      .getVendingMachineBalance()
+      .call();
+
+    assert.equal(112, stock);
+  });
+
+  // stock is 100, mininmum stock is 30
+  it("allows multiple accounts to purchase", async () => {
+    await vendingMachine.methods.purchase(1).send({
+      from: accounts[1],
+      value: web3.utils.toWei("2", "ether"),
+    });
+    // 100 - 1 = 99
+
+    await vendingMachine.methods.purchase(60).send({
+      from: accounts[3],
+      value: web3.utils.toWei("120", "ether"),
+    });
+    // 99 - 60 = 39
+
+    assert.rejects(
+      vendingMachine.methods.purchase(10).send({
+        from: accounts[2],
+        value: web3.utils.toWei("20", "ether"),
+      })
+    );
+    // 39 - 10 = 29 !! should be rejected
+
+    const balance = await vendingMachine.methods
+      .getVendingMachineBalance()
+      .call({
+        from: accounts[1],
+      });
+
+    assert.equal(39, balance);
+  });
+});
