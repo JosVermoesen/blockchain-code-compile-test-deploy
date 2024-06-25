@@ -10,7 +10,7 @@ let accounts;
 
 beforeEach(async () => {
   accounts = await web3.eth.getAccounts();
-  console.log("accounts: ", accounts);
+  // console.log("accounts: ", accounts);
 
   vendingMachine = await new web3.eth.Contract(abi)
     .deploy({ data: evm.bytecode.object })
