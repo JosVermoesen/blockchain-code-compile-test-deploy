@@ -15,7 +15,7 @@ beforeEach(async () => {
     .deploy({ data: evm.bytecode.object })
     .send({ from: accounts[0], gas: "1100000" });
 });
-describe("Lottery Contract", () => {
+describe("StructStore Contract", () => {
   it("deploys a contract", () => {
     assert.ok(structStore.options.address);
   });

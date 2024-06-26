@@ -6,16 +6,16 @@ pragma solidity ^0.8.26;
 
 contract Products {
     struct Product {
-        uint256 id;
+        uint id;
         string name;
-        uint256 price;
-        uint256 quantity;
+        uint price;
+        uint quantity;
     }
     address owner;
 
     Product public removeMe;
 
-    mapping(uint256 => Product) public products;
+    mapping(uint => Product) public products;
     Product[] public productArray;
 
     constructor() {
@@ -28,19 +28,19 @@ contract Products {
     }
 
     function setProduct(
-        uint256 _id,
+        uint _id,
         string memory _name,
-        uint256 _price,
-        uint256 _quantity
-    ) public onlyOwner {
+        uint _price,
+        uint _quantity
+    ) public onlyOwner() {
         Product memory product = Product(_id, _name, _price, _quantity);
         products[_id] = product;
         productArray.push(Product(_id, _name, _price, _quantity));
     }
 
     function getProduct(
-        uint256 _id
-    ) public view returns (string memory, uint256, uint256) {
+        uint _id
+    ) public view returns (string memory, uint, uint) {
         require(products[_id].id != 0, "Product is not available");
         Product memory product = products[_id];
         return (product.name, product.price, product.quantity);
@@ -50,11 +50,15 @@ contract Products {
         return productArray;
     }
 
+    function productsCount() public view returns (uint) {
+        return productArray.length;
+    }
+
     function updateProduct(
-        uint256 _id,
+        uint _id,
         string memory _name,
-        uint256 _price,
-        uint256 _quantity
+        uint _price,
+        uint _quantity
     ) public onlyOwner {
         require(products[_id].id != 0, "Product is not available");
         deleteProduct(_id);
@@ -62,7 +66,7 @@ contract Products {
         productArray.push(Product(_id, _name, _price, _quantity));
     }
 
-    function deleteProduct(uint256 _id) public onlyOwner {
+    function deleteProduct(uint _id) public onlyOwner {
         require(products[_id].id != 0, "Product is not available");
         delete products[_id];
         for (uint i = 0; i < productArray.length; i++) {
