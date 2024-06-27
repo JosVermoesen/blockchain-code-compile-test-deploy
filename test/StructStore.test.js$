@@ -26,13 +26,17 @@ describe("StructStore Contract", () => {
         from: accounts[0],
       });
 
-      await structStore.methods.addUserData(1, "The quick brown fox").send({
-        from: accounts[0],
-      });
+      await structStore.methods
+        .addUserData(1, { myLastName: "nothing", myFirstName: "nobody" })
+        .send({
+          from: accounts[0],
+        });
 
       const data1 = await structStore.methods.getUserDataOnIndex(1, 0).call({
         from: accounts[0],
       });
+
+      console.log("data1", data1);
       assert.equal(data1, "The quick brown fox");
 
       await structStore.methods

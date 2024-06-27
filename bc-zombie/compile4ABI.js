@@ -10,6 +10,6 @@ fs.removeSync(buildPath);
 fs.ensureDirSync(buildPath);
 
 fs.outputFileSync(
-  path.resolve(buildPath, "dapazonABI.json"),
+  path.resolve(buildPath, "zombieABI.json"),
   JSON.stringify(abi)
 );

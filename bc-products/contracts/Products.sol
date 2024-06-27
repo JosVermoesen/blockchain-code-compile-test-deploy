@@ -1,5 +1,6 @@
 //SPDX-License-Identifier:MIT
-pragma solidity ^0.8.26;
+pragma solidity ^0.7.6;
+pragma abicoder v2; // Add this line to enable ABI coder v2
 
 // https://github.com/syedmuhamaddanish
 // https://www.youtube.com/watch?v=07V4cKv16iw

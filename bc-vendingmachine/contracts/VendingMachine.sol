@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.26;
+pragma solidity ^0.7.6;
 
 // https://github.com/jspruance
 // Create a vending machine contract that sells donuts for 2 ETH each

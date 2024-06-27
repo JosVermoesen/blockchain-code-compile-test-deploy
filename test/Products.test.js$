@@ -44,6 +44,7 @@ describe("Dapazon Contract", () => {
     });
 
     const productsCount = await products.methods.productsCount().call();
+    // console.log("productcount:", productsCount);
     assert.equal(productsCount, 2);
   });
 });
