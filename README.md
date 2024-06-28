@@ -52,6 +52,10 @@ All in one command:
 
 To focus on testing just one test.js file, just add an extra character (for example a $ sign) at the end of the other test files to disable them for testing.
 
+### Helper for string to bytes32 conversion
+
+- `npm i ethers@6`
+
 ## Sepolia (from 2024)
 
 <https://sepolia.etherscan.io/>
