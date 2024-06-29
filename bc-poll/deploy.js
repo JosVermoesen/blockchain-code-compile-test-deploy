@@ -26,3 +26,5 @@ const deploy = async () => {
   provider.engine.stop();
 };
 deploy();
+
+// 0xA373a9A8AEced46ECeFbdBb5959593Cfa4615b13 - contract address for bc-poll 29/06/2024
