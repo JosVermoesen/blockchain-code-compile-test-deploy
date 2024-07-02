@@ -28,7 +28,7 @@ contract Products {
         _;
     }
 
-    function setProduct(
+    function createProduct(
         uint _id,
         string memory _name,
         uint _price,
