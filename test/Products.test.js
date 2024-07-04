@@ -20,7 +20,7 @@ describe("Products Contract", () => {
     assert.ok(products.options.address);
   });
 
-  it("allows a user to create, get all, get one of products", async () => {
+  it("allows a user to CRUD products", async () => {
     await products.methods.createProduct(1, "Product 1", 1000, 2).send({
       from: accounts[0],
       gas: "1000000",
@@ -42,16 +42,15 @@ describe("Products Contract", () => {
     });
 
     const productArray = await products.methods.getAllProducts().call();
-
     const productsCount = await products.methods.productsCount().call();
-    // console.log("productsCount:", productsCount);
 
     assert.equal(productsCount, 4);
     assert.equal(productArray.length, 4);
     assert.equal(productArray[1].name, "Product 2");
 
-    // console.log("productArray:", productArray);
-    [
+    // console.log("productsCount:", productsCount);
+    // console.log("productArray:", productArray); // result below
+    /* [
       {
         0: 1n,
         1: "Product 1",
@@ -96,12 +95,43 @@ describe("Products Contract", () => {
         price: 500n,
         quantity: 10n,
       },
-    ];
+    ]; */
 
     const aProduct = await products.methods.getProduct(5).call();
-    // console.log("product:", aProduct);
     assert.equal(aProduct[0], "Product 5");
     assert.equal(aProduct[1], 500);
     assert.equal(aProduct[2], 10);
+
+    // console.log("product:", aProduct); // result below
+    // [{ 0: "Product 5", 1: 500n, 2: 10n, __length__: 3 }];
+
+    const deletedProduct = await products.methods.deleteProduct(5).send({
+      from: accounts[0],
+      gas: "1000000",
+    });
+    // console.log("deletedProduct:", deletedProduct);
+    assert.equal(deletedProduct.status, 1);
+
+    const productArrayAfterDelete = await products.methods
+      .getAllProducts()
+      .call();
+    const productsCountAfterDelete = await products.methods
+      .productsCount()
+      .call();
+
+    assert.equal(productsCountAfterDelete, 3);
+    assert.equal(productArrayAfterDelete.length, 3);
+    assert.equal(productArrayAfterDelete[3], undefined);
+
+    await products.methods.updateProduct(2, "Product 2 Updated", 501, 15).send({
+      from: accounts[0],
+      gas: "1000000",
+    });
+
+    const updatedProduct = await products.methods.getProduct(2).call();
+    // console.log("updatedProduct:", updatedProduct);
+    assert.equal(updatedProduct[0], "Product 2 Updated");
+    assert.equal(updatedProduct[1], 501);
+    assert.equal(updatedProduct[2], 15);
   });
 });

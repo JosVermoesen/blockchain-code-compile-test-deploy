@@ -5,7 +5,7 @@ pragma abicoder v2; // Add this line to enable ABI coder v2
 // https://github.com/syedmuhamaddanish
 // https://www.youtube.com/watch?v=07V4cKv16iw
 
-contract Products {
+contract ProductsCrud {
     struct Product {
         uint id;
         string name;

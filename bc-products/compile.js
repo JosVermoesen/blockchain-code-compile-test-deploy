@@ -26,4 +26,4 @@ const input = {
 
 module.exports = JSON.parse(solc.compile(JSON.stringify(input))).contracts[
   solContract
-].Products; // return the contract object. WARN2: do not use the constant name
+].ProductsCrud; // return the contract object. WARN2: do not use the constant name
