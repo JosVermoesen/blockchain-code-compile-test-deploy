@@ -57,7 +57,7 @@ describe("Poll Contract", () => {
     answer2 = ethers.encodeBytes32String("Waffles");
     answer3 = ethers.encodeBytes32String("Cereal");
     answerArray = [answer1, answer2, answer3];
-    console.log("answerArray:", answerArray);
+    // console.log("answerArray:", answerArray);
 
     resultCreate = await pollContract.methods
       .createPoll(
@@ -74,9 +74,18 @@ describe("Poll Contract", () => {
     createdPoll = await pollContract.methods.getPoll(1).call({
       from: accounts[1],
     });
+    // console.log("createdPoll[1]:", "\n", createdPoll[1], "\n");
     assert.equal(createdPoll[1], "Preferred breakfast?");
-    // console.log("createdPoll:", "\n", createdPoll, "\n");
 
+    /* console.log("createdPoll[4]:", "\n", createdPoll[4], "\n");
+    [
+      "0x50616e63616b6573000000000000000000000000000000000000000000000000",
+      "0x576166666c657300000000000000000000000000000000000000000000000000",
+      "0x43657265616c0000000000000000000000000000000000000000000000000000",
+    ]; */
+    answer2 = ethers.decodeBytes32String(createdPoll[4][1]);
+    assert.equal(answer2, "Waffles");
+    
     let voteResult = await pollContract.methods
       .vote(0, 2)
       .send({ from: accounts[1], gas: "1000000" });
