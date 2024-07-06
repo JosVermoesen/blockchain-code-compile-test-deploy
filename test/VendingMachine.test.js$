@@ -7,6 +7,7 @@ const { abi, evm } = require("../bc-vendingmachine/compile");
 
 let vendingMachine;
 let accounts;
+let balance;
 
 beforeEach(async () => {
   accounts = await web3.eth.getAccounts();
@@ -47,27 +48,23 @@ describe("VendingMachine Contract", () => {
     });
     // 99 - 60 = 39
 
-    const balance = await vendingMachine.methods
-      .getVendingMachineBalance()
-      .call({
-        from: accounts[1],
-      });
+    balance = await vendingMachine.methods.getVendingMachineBalance().call({
+      from: accounts[1],
+    });
     assert.equal(39, balance);
 
-    /* assert.rejects(
+    assert.rejects(
       vendingMachine.methods.purchase(10).send({
         from: accounts[2],
         value: web3.utils.toWei("20", "ether"),
       })
     );
-    // 39 - 10 = 29 !! should be rejected
+    // 39 - 10 = 29 !! should be rejected because stock is less than 30
 
-    const balance = await vendingMachine.methods
-      .getVendingMachineBalance()
-      .call({
-        from: accounts[1],
-      });
+    balance = await vendingMachine.methods.getVendingMachineBalance().call({
+      from: accounts[1],
+    });
 
-    assert.equal(39, balance); */
+    assert.equal(39, balance);
   });
 });

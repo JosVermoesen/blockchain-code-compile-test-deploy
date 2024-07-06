@@ -1,8 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
 
-// https://www.youtube.com/@naderdabit
-// https://www.youtube.com/watch?v=GB3hiiNNDjk&list=PLSMvK3DkHvw9xRZuFvS1YO5QpJZZfk-6f
-
 pragma solidity >=0.7.0 <0.9.0;
 
 /** 
@@ -30,23 +27,19 @@ contract Ballot {
     mapping(address => Voter) public voters;
 
     Proposal[] public proposals;
-
-    /** 
-     * @dev Create a new ballot to choose one of 'proposalNames'.
-     * @param proposalNames names of proposals
-     */
-    constructor(bytes32[] memory proposalNames) {
+    
+    constructor() {
         chairperson = msg.sender;
-        voters[chairperson].weight = 1;
+        voters[chairperson].weight = 1;        
+    }
 
+    function initProposals(bytes32[] memory proposalNames) public {
+        require(
+            msg.sender == chairperson,
+            "Only chairperson can initialize proposals."
+        );
         for (uint i = 0; i < proposalNames.length; i++) {
-            // 'Proposal({...})' creates a temporary
-            // Proposal object and 'proposals.push(...)'
-            // appends it to the end of 'proposals'.
-            proposals.push(Proposal({
-                name: proposalNames[i],
-                voteCount: 0
-            }));
+            proposals.push(Proposal({name: proposalNames[i], voteCount: 0}));
         }
     }
 

@@ -50,7 +50,7 @@ All in one command:
 - Be sure using mocha for test scripts in package.json file.
 - `npm run test` for processing all test.js files in the test folder
 
-To focus on testing just one test.js file, just add an extra character (for example a $ sign) at the end of the other test files to disable them for testing.
+To focus on testing just one test.js file, add an extra character (for example a $ sign) at the end of the other test files to disable them from testing.
 
 ### Helper for string to bytes32 conversion
 
